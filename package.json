@@ -1,0 +1,18 @@
+{
+  "name": "rwebreports",
+  "description": "A node.js gateway for R:Web Reports",
+  "version": "0.1.0",
+  "homepage": "http://github.com/rbase/node-rwebreports",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rbase/node-rwebreports.git"
+  },
+  "main": "./lib/rwebreports",
+  "dependencies": {
+    "bluebird": "~2.3.6",
+    "temp": "~0.8.1"
+  },
+  "scripts": {
+    "test": "set RWEBREPORTS_PATH=C:\\RBTI\\RWebReports95_64\\RWebReports95_64.exe && node test/rwebreports-test"
+  }
+}
