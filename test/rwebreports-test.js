@@ -1,15 +1,35 @@
 var assert = require('assert');
 var rwebreports = require('..');
 var fs = require('fs');
+var path = require('path');
 
-var filename = 'test.pdf';
+var dsn = 'RRBYW18';
 
-var config = 'DSN RRBYW18\n'
+var configFilename = path.join(__dirname, 'config.pdf');
+var config = 'DSN ' + dsn + '\n'
   + 'REPORT_NAME Customers\n'
-  + 'WHERE_CLAUSE OPTION PDF | FILENAME ' + filename;
+  + 'WHERE_CLAUSE OPTION PDF | FILENAME ' + configFilename;
 
-rwebreports(config, function (err) {
-  assert(!err, 'Unexpected error');
-  assert(fs.existsSync(filename), 'Expected file to exist');
-  fs.unlinkSync(filename);
-});
+rwebreports.runConfig(config)
+  .then(function () {
+    assert(fs.existsSync(configFilename), 'Expected file to exist');
+  }).catch(function () {
+    assert(false, 'Unexpected error');
+  }).finally(function () {
+    fs.unlinkSync(configFilename);
+  }).done()
+
+var commandFilename = path.join(__dirname, 'command.pdf');
+var command = 'PRINT Customers OPTION PDF | FILENAME &vFilename';
+
+rwebreports.runCommand({
+  command: command,
+  dsn: dsn,
+  variables: {vFilename: commandFilename}
+}).then(function () {
+    assert(fs.existsSync(commandFilename), 'Expected file to exist');
+  }).catch(function () {
+    assert(false, 'Unexpected error');
+  }).finally(function () {
+    fs.unlinkSync(commandFilename);
+  }).done()
